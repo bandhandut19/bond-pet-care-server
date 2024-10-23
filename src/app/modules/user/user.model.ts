@@ -50,8 +50,8 @@ userSchema.post('save', async function (doc, next) {
 })
 
 userSchema.statics.isValidPassword = async function (
-  plainPassword: string,
-  hashedPassword: string,
+  plainPassword,
+  hashedPassword,
 ) {
   return await bcrypt.compare(plainPassword, hashedPassword)
 }

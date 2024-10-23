@@ -8,7 +8,7 @@ const registerUserIntoDB = async (payload: TUser) => {
 }
 const loginIntoDB = async (payload: TLogin) => {
   const { email, password } = payload
-  const isEmailExists = await User.findOne({ email: email })
+  const isEmailExists = await User.findOne({ email: email }).select('+password')
   if (!isEmailExists) {
     throw new Error('Email does not exists in Bond Pet Care')
   }
@@ -17,10 +17,8 @@ const loginIntoDB = async (payload: TLogin) => {
   )
 
   // checking password
-  const isValidPassword = await User.isValidPassword(
-    user?.password as string,
-    password,
-  )
+  const hashedPassword = isEmailExists?.password
+  const isValidPassword = await User.isValidPassword(password, hashedPassword)
   if (!isValidPassword) {
     throw new Error('Password is incorrect')
   }

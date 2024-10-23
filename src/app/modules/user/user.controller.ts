@@ -55,6 +55,7 @@ const login = helperAsync(async (req, res, next) => {
       data: result,
     })
   } catch (error: any) {
+    console.log(error)
     return res.status(500).json({
       success: false,
       message: 'Internal Server Error',
