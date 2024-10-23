@@ -48,7 +48,13 @@ const loginIntoDB = async (payload: TLogin) => {
     userRefreshToken,
   }
 }
+
+const getProfileFromDB = async (userId: string) => {
+  const result = await User.findById(userId)
+  return result
+}
 export const UserServices = {
   registerUserIntoDB,
   loginIntoDB,
+  getProfileFromDB,
 }

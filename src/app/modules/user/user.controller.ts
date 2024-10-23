@@ -63,7 +63,33 @@ const login = helperAsync(async (req, res, next) => {
     })
   }
 })
+
+const profile = helperAsync(async (req, res, next) => {
+  const userId = req.params.userid
+  try {
+    const result = await UserServices.getProfileFromDB(userId)
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'No User Found',
+        data: [],
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'User Profile Retrived Successfully',
+      data: result,
+    })
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+})
 export const UserControllers = {
   register,
   login,
+  profile,
 }
