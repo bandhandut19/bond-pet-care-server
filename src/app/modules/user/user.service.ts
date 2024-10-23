@@ -50,7 +50,7 @@ const loginIntoDB = async (payload: TLogin) => {
 }
 
 const getProfileFromDB = async (userId: string) => {
-  const result = await User.findById(userId)
+  const result = await User.findById(userId).select('-password')
   return result
 }
 export const UserServices = {
