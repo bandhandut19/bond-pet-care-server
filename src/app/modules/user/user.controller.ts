@@ -111,9 +111,35 @@ const allUsers = helperAsync(async (req, res, next) => {
     })
   }
 })
+const changePassword = helperAsync(async (req, res, next) => {
+  try {
+    const userid = req.params.userid
+    const payload = req.body
+    const result = await UserServices.changePasswordIntoDB(userid, payload)
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'Password Change was unsuccessfull',
+        data: [],
+      })
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'Password Changed Successfully',
+      data: result,
+    })
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+      error: error.message,
+    })
+  }
+})
 export const UserControllers = {
   register,
   login,
   profile,
   allUsers,
+  changePassword,
 }

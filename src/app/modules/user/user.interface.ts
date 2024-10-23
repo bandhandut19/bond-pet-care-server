@@ -14,6 +14,10 @@ export interface TLogin {
   email: string
   password: string
 }
+export interface TChangePassword {
+  oldPassword: string
+  newPassword: string
+}
 export interface UserModel extends Model<TUser> {
   encryptPassword(plainPassword: string): Promise<string>
   isValidPassword(

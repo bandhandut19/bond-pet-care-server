@@ -1,5 +1,5 @@
 import config from '../../config'
-import { TLogin, TUser } from './user.interface'
+import { TChangePassword, TLogin, TUser } from './user.interface'
 import { User } from './user.model'
 import jwt from 'jsonwebtoken'
 const registerUserIntoDB = async (payload: TUser) => {
@@ -58,9 +58,36 @@ const getAllUsersFromDB = async () => {
   const result = await User.find().select('-password')
   return result
 }
+const changePasswordIntoDB = async (
+  userId: string,
+  payload: TChangePassword,
+) => {
+  const { oldPassword, newPassword } = payload
+  const user = await User.findById(userId).select('+password')
+  if (!user) {
+    throw new Error('User not found in Bond Pet Care')
+  }
+  const currentPassword = user?.password
+  //checking old password
+  const isOldPasswordValid = await User.isValidPassword(
+    oldPassword,
+    currentPassword,
+  )
+  if (!isOldPasswordValid) {
+    throw new Error('Old Password is incorrect')
+  }
+
+  const newEncryptedPassword = await User.encryptPassword(newPassword)
+
+  const result = await User.findByIdAndUpdate(userId, {
+    password: newEncryptedPassword,
+  })
+  return result
+}
 export const UserServices = {
   registerUserIntoDB,
   loginIntoDB,
   getProfileFromDB,
   getAllUsersFromDB,
+  changePasswordIntoDB,
 }
