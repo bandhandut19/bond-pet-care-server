@@ -49,4 +49,10 @@ userSchema.post('save', async function (doc, next) {
   next()
 })
 
+userSchema.statics.isValidPassword = async function (
+  plainPassword: string,
+  hashedPassword: string,
+) {
+  return await bcrypt.compare(plainPassword, hashedPassword)
+}
 export const User = model<TUser, UserModel>('user', userSchema)

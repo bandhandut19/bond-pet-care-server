@@ -10,7 +10,14 @@ export interface TUser {
   role: 'admin' | 'user'
 }
 export type TUserRoles = 'admin' | 'user'
-
+export interface TLogin {
+  email: string
+  password: string
+}
 export interface UserModel extends Model<TUser> {
   encryptPassword(plainPassword: string): Promise<string>
+  isValidPassword(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean>
 }
